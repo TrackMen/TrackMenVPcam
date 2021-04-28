@@ -1,0 +1,183 @@
+<h1>TrackMen VP cam Documentation</h1>
+
+<h2>Features</h2>
+
+<ul>
+	<li>Receive camera tracking data including lens data from TrackMen tracking systems via LiveLink.</li>
+	<li>Camera controller: apply tracking data to camera objects in the scene.</li>
+	<li>Composure: apply tracking data to Composure CG layers (max. 1 camera per engine instance).</li>
+	<li>Debug output: display incoming tracking data in camera view for debug purposes.</li>
+</ul>
+
+
+
+<h2>Install</h2>
+
+Install the plugin from the Epic marketplace like any other plugin.
+
+
+
+<h2>Enabling the Plugin</h2>
+
+
+<div class=polaroid>
+    <img src="images/Plugins01.png">
+    <div class=container>
+        Open Edit -> Plugins.
+    </div>
+</div>
+
+<div class=polaroid>
+    <img src="images/Plugins02.png">
+    <div class=container>
+        Search for the Live Link plugin in the "Built-In" section, select it and make sure the "enabled"-checkbox is checked.
+    </div>
+</div>
+
+<div class=polaroid>
+    <img src="images/Plugins03.png">
+    <div class=container>
+        Search for the TrackMen plugin in the "Installed" section, select it and make sure the "enabled"-checkbox is checked.
+    </div>
+</div>
+
+A restart of the Unreal Engine is required after changing the enabled-status of plugins.
+
+
+
+<h2>Adding Live Link Sources</h2>
+
+<div class=polaroid>
+    <img src="images/Source01.png">
+    <div class=container>
+        Open the Live Link Window.
+    </div>
+</div>
+
+<div class=polaroid>
+    <img src="images/Source02.png">
+    <div class=container>
+        Press the "+Source" button.
+    </div>
+</div>
+
+<div class=polaroid>
+    <img src="images/Source03.png">
+    <div class=container>
+		<ul>
+			<li>Select the TrackMen Camera Source,</li>
+			<li>Enter the UDP port that is used to receive tracking data,</li>
+			<li>Press the "Add New Camera Source" button.</li>
+		</ul>
+    </div>
+</div>
+
+<div class=polaroid>
+    <img src="images/Source04.png">
+    <div class=container>
+        A new source and a corresponding subject were added.
+    </div>
+</div>
+
+
+
+<h2>Controlling a CineCamera using Live Link Data</h2>
+
+
+<div class=polaroid>
+    <img src="images/CineCameraActor01.png">
+    <div class=container>
+        Select a CineCameraActor.
+    </div>
+</div>
+
+<div class=polaroid>
+    <img src="images/CineCameraActor02.png">
+    <div class=container>
+        Press the "Add Component" button in the details panel.
+    </div>
+</div>
+
+<div class=polaroid>
+    <img src="images/CineCameraActor03.png">
+    <div class=container>
+		<ul>
+			<li>Search for "Track Men".</li>
+			<li>Select "Track Men Live Link Camera Controller Component".</li>
+		</ul>
+    </div>
+</div>
+
+<div class=polaroid>
+    <img src="images/CineCameraActor04.png">
+    <div class=container>
+        Select the newly added component.
+    </div>
+</div>
+
+<div class=polaroid>
+    <img src="images/CineCameraActor05.png">
+    <div class=container>
+		<ul>
+			<li>Click on the "Subject Representation" combo box.</li>
+			<li>Select the camera subject that was created together with the source.</li>
+		</ul>
+    </div>
+</div>
+
+<div class=polaroid>
+    <img src="images/CineCameraActor06.png">
+    <div class=container>
+		<ul>
+			<li>The CineCameraActor is now updated according to the incoming tracking data.</li>
+			<li>A lens model post processing material is added to the post processing stack of the Camera component if it does not exist yet.</li>
+		</ul>
+    </div>
+</div>
+
+
+
+<h2>Apply Tracking Data to Composure CG layers</h2>
+
+<div class="warning box">
+	&#9888; WARNING: Supports only one camera per Unreal instance.
+</div>
+
+
+<div class=polaroid>
+    <img src="images/Composure01.png">
+    <div class=container>
+        In the SceneCaptureComponent2D of your CG layer, add the TrackMenParamCollectionLensDistortion_Inst material instance under RenderingFeatures -> Post Process Materials -> Array.
+    </div>
+</div>
+
+
+
+<h2>Debug Output</h2>
+
+<div class=polaroid>
+    <img src="images/DebugDisplay01.png">
+    <img src="images/DebugDisplay02.png">
+    <div class=container>
+        Add the TrackMenShowLiveLinkParamsDebug component to your CineCameraActor.
+    </div>
+</div>
+
+<div class=polaroid>
+    <img src="images/DebugDisplay03.png">
+    <div class=container>
+        Make sure the "show" flag is activated.
+    </div>
+</div>
+
+<div class=polaroid>
+    <img src="images/DebugDisplay03.png">
+    <div class=container>
+        Incoming tracking data should be displayed when rendering the scene through the CineCameraActor.
+    </div>
+</div>
+
+
+
+<link rel="stylesheet" type="text/css" media="all" href="style.css" />
+
