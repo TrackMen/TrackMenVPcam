@@ -1,30 +1,10 @@
-/* Copyright 2020 TrackMen GmbH <mail@trackmen.de>
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without restriction,
-including without limitation the rights to use, copy, modify, merge,
-publish, distribute, sublicense, and/or sell copies of the Software,
-and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+/* Copyright 2021 TrackMen GmbH <mail@trackmen.de> */
 
 #pragma once
 
 #include "UTrackMenCameraController.h"
 #include "UTrackMenCameraRole.h"
+#include "UTrackMenLiveLinkCameraControllerComponent.h"
 #include "Components/SceneComponent.h"
 #include "CineCameraComponent.h"
 #include "Features/IModularFeatures.h"
@@ -80,10 +60,12 @@ void UTrackMenCameraController::ApplyDataToActor()
 
 void UTrackMenCameraController::ApplyTransformData()
 {
-	USceneComponent* node = Cast<USceneComponent>(AttachedComponent);
-	if (nullptr != node)
-	{
-		TransformData.ApplyTransform(node, TrackingFrame.Transform);
+	if (IsTransformEnabled()) {
+		USceneComponent* node = Cast<USceneComponent>(AttachedComponent);
+		if (nullptr != node)
+		{
+			TransformData.ApplyTransform(node, TrackingFrame.Transform);
+		}
 	}
 }
 
@@ -111,10 +93,6 @@ void UTrackMenCameraController::CheckForMaterialParameterCollectionInstance()
 
 void UTrackMenCameraController::ApplyLensDataToCineCamera(UCineCameraComponent * camera, const float tex_coord_scale)
 {
-	auto lens_settings = camera->LensSettings;
-	lens_settings.MinFocalLength = 0.01f;
-	camera->LensSettings = lens_settings;
-
 	// Need to adjust for screen percentage / overscan,
 	// i.e rendering a larger image to avoid cut off edges
 	// due to inward lens distortion.
@@ -144,17 +122,70 @@ void UTrackMenCameraController::ApplyLensDataToCineCamera(UCineCameraComponent *
 	//
 	// E.g. Twice the screen diameter (tex_coord_scale=2) 
 	// needs half the focal length
-	camera->CurrentFocalLength = TrackingFrame.FocalLength / tex_coord_scale;
+	if (IsFocalLengthEnabled()) {
+		auto lens_settings = camera->LensSettings;
+		lens_settings.MinFocalLength = 0.01f;
+		camera->LensSettings = lens_settings;
+		camera->CurrentFocalLength = TrackingFrame.FocalLength / tex_coord_scale;
+	}
 
-	auto focus_settings = camera->FocusSettings;
-	focus_settings.ManualFocusDistance = TrackingFrame.FocusDistance;
-	camera->FocusSettings = focus_settings;
+	if (IsApertureEnabled()) {
+		camera->CurrentAperture = TrackingFrame.Aperture;
+	}
 
-	FCameraFilmbackSettings fbsettings = camera->Filmback;
-	fbsettings.SensorWidth = TrackingFrame.chip_size.X;
-	fbsettings.SensorHeight = TrackingFrame.chip_size.Y;
-	camera->Filmback = fbsettings;
+	if (IsFocusDistanceEnabled()) {
+		auto focus_settings = camera->FocusSettings;
+		focus_settings.ManualFocusDistance = TrackingFrame.FocusDistance;
+		camera->FocusSettings = focus_settings;
+	}
+
+	if (IsChipSizeEnabled()) {
+		FCameraFilmbackSettings fbsettings = camera->Filmback;
+		fbsettings.SensorWidth = TrackingFrame.chip_size.X;
+		fbsettings.SensorHeight = TrackingFrame.chip_size.Y;
+		camera->Filmback = fbsettings;
+	}
 }
+
+UTrackMenLiveLinkCameraControllerComponent* UTrackMenCameraController::GetControllerComponent() {
+	return GetOuterActor()->FindComponentByClass<UTrackMenLiveLinkCameraControllerComponent>();
+}
+
+bool UTrackMenCameraController::IsTransformEnabled() {
+	UTrackMenLiveLinkCameraControllerComponent* controller_component = GetControllerComponent();
+	return (controller_component && controller_component->EnableTransform);
+}
+
+bool UTrackMenCameraController::IsChipSizeEnabled() {
+	UTrackMenLiveLinkCameraControllerComponent* controller_component = GetControllerComponent();
+	return (controller_component && controller_component->EnableChipSize);
+}
+
+bool UTrackMenCameraController::IsCenterShiftEnabled() {
+	UTrackMenLiveLinkCameraControllerComponent* controller_component = GetControllerComponent();
+	return (controller_component && controller_component->EnableCenterShift);
+}
+
+bool UTrackMenCameraController::IsLensDistortionEnabled() {
+	UTrackMenLiveLinkCameraControllerComponent* controller_component = GetControllerComponent();
+	return (controller_component && controller_component->EnableLensDistortion);
+}
+
+bool UTrackMenCameraController::IsFocalLengthEnabled() {
+	UTrackMenLiveLinkCameraControllerComponent* controller_component = GetControllerComponent();
+	return (controller_component && controller_component->EnableFocalLength);
+}
+
+bool UTrackMenCameraController::IsApertureEnabled() {
+	UTrackMenLiveLinkCameraControllerComponent* controller_component = GetControllerComponent();
+	return (controller_component && controller_component->EnableAperture);
+}
+
+bool UTrackMenCameraController::IsFocusDistanceEnabled() {
+	UTrackMenLiveLinkCameraControllerComponent* controller_component = GetControllerComponent();
+	return (controller_component && controller_component->EnableFocusDistance);
+}
+
 
 void UTrackMenCameraController::ApplyLensDataToMaterial(float &tex_coord_scale)
 {
@@ -162,21 +193,33 @@ void UTrackMenCameraController::ApplyLensDataToMaterial(float &tex_coord_scale)
 		return;
 	}
 	m_lens_mat_inst->SetScalarParameterValue("TexCoordScale", tex_coord_scale);
-	m_lens_mat_inst->SetScalarParameterValue("k1", TrackingFrame.lens_distortion.X);
-	m_lens_mat_inst->SetScalarParameterValue("k2", TrackingFrame.lens_distortion.Y);
-	m_lens_mat_inst->SetScalarParameterValue("CenterX", TrackingFrame.center_shift.X);
-	m_lens_mat_inst->SetScalarParameterValue("CenterY", TrackingFrame.center_shift.Y);
-	m_lens_mat_inst->SetScalarParameterValue("ChipSizeX", TrackingFrame.chip_size.X);
-	m_lens_mat_inst->SetScalarParameterValue("ChipSizeY", TrackingFrame.chip_size.Y);
+	if (IsLensDistortionEnabled()) {
+		m_lens_mat_inst->SetScalarParameterValue("k1", TrackingFrame.lens_distortion.X);
+		m_lens_mat_inst->SetScalarParameterValue("k2", TrackingFrame.lens_distortion.Y);
+	}
+	if (IsCenterShiftEnabled()) {
+		m_lens_mat_inst->SetScalarParameterValue("CenterX", TrackingFrame.center_shift.X);
+		m_lens_mat_inst->SetScalarParameterValue("CenterY", TrackingFrame.center_shift.Y);
+	}
+	if (IsChipSizeEnabled()) {
+		m_lens_mat_inst->SetScalarParameterValue("ChipSizeX", TrackingFrame.chip_size.X);
+		m_lens_mat_inst->SetScalarParameterValue("ChipSizeY", TrackingFrame.chip_size.Y);
+	}
 
 	if (m_param_collection_inst) {
-		m_param_collection_inst->SetScalarParameterValue(FName("TexCoordScale"), tex_coord_scale);
-		m_param_collection_inst->SetScalarParameterValue(FName("k1"), TrackingFrame.lens_distortion.X);
-		m_param_collection_inst->SetScalarParameterValue(FName("k2"), TrackingFrame.lens_distortion.Y);
-		m_param_collection_inst->SetScalarParameterValue(FName("CenterX"), TrackingFrame.center_shift.X);
-		m_param_collection_inst->SetScalarParameterValue(FName("CenterY"), TrackingFrame.center_shift.Y);
-		m_param_collection_inst->SetScalarParameterValue(FName("ChipSizeX"), TrackingFrame.chip_size.X);
-		m_param_collection_inst->SetScalarParameterValue(FName("ChipSizeY"), TrackingFrame.chip_size.Y);
+		m_param_collection_inst->SetScalarParameterValue("TexCoordScale", tex_coord_scale);
+		if (IsLensDistortionEnabled()) {
+			m_param_collection_inst->SetScalarParameterValue("k1", TrackingFrame.lens_distortion.X);
+			m_param_collection_inst->SetScalarParameterValue("k2", TrackingFrame.lens_distortion.Y);
+		}
+		if (IsCenterShiftEnabled()) {
+			m_param_collection_inst->SetScalarParameterValue("CenterX", TrackingFrame.center_shift.X);
+			m_param_collection_inst->SetScalarParameterValue("CenterY", TrackingFrame.center_shift.Y);
+		}
+		if (IsChipSizeEnabled()) {
+			m_param_collection_inst->SetScalarParameterValue("ChipSizeX", TrackingFrame.chip_size.X);
+			m_param_collection_inst->SetScalarParameterValue("ChipSizeY", TrackingFrame.chip_size.Y);
+		}
 	}
 }
 

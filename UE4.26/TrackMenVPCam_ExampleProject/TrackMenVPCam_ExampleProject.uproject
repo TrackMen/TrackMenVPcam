@@ -5,7 +5,7 @@
 	"Description": "",
 	"Modules": [
 		{
-			"Name": "TrackMenVPCam_ExampleProject",
+			"Name": "ExampleProject",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}

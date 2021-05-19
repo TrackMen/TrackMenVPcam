@@ -1,25 +1,4 @@
-/* Copyright 2020 TrackMen GmbH <mail@trackmen.de>
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without restriction,
-including without limitation the rights to use, copy, modify, merge,
-publish, distribute, sublicense, and/or sell copies of the Software,
-and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-*/
+/* Copyright 2021 TrackMen GmbH <mail@trackmen.de> */
 
 #pragma once
 
@@ -40,6 +19,21 @@ class TRACKMENVPCAM_API UTrackMenLiveLinkCameraControllerComponent : public ULiv
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(EditAnywhere, DisplayName = "Enable transform", Category = "TrackMen")
+		bool EnableTransform = true;
+	UPROPERTY(EditAnywhere, DisplayName = "Enable chip size", Category = "TrackMen")
+		bool EnableChipSize = true;
+	UPROPERTY(EditAnywhere, DisplayName = "Enable center shift", Category = "TrackMen")
+		bool EnableCenterShift = true;
+	UPROPERTY(EditAnywhere, DisplayName = "Enable lens distortion", Category = "TrackMen")
+		bool EnableLensDistortion = true;
+	UPROPERTY(EditAnywhere, DisplayName = "Enable focal length", Category = "TrackMen")
+		bool EnableFocalLength = true;
+	UPROPERTY(EditAnywhere, DisplayName = "Enable aperture", Category = "TrackMen")
+		bool EnableAperture = true;
+	UPROPERTY(EditAnywhere, DisplayName = "Enable focus distance", Category = "TrackMen")
+		bool EnableFocusDistance = true;
 
 	UTrackMenLiveLinkCameraControllerComponent();
 };
