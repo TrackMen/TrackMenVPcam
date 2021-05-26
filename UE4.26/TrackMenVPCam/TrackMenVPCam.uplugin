@@ -1,7 +1,7 @@
 {
 	"FileVersion" : 3,
-	"Version" : 20210519,
-	"VersionName" : "20210519",
+	"Version" : 20210526,
+	"VersionName" : "20210526",
 	"EngineName" : "4.26.0",
 	"FriendlyName" : "TrackMen VP cam",
 	"Description" : "Use TrackMen camera tracking systems in UnrealEngine.",
