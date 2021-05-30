@@ -13,6 +13,7 @@
 #include "Materials/MaterialParameterCollection.h"
 #include "Materials/MaterialParameterCollectionInstance.h"
 #include "UObject/ConstructorHelpers.h"
+#include "GameFramework/Actor.h"
 #if WITH_EDITOR
 #include "Kismet2/ComponentEditorUtils.h"
 #endif
