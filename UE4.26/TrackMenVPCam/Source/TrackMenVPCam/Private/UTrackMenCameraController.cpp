@@ -14,6 +14,7 @@
 #include "Materials/MaterialParameterCollectionInstance.h"
 #include "UObject/ConstructorHelpers.h"
 #include "GameFramework/Actor.h"
+#include "Engine/World.h"
 #if WITH_EDITOR
 #include "Kismet2/ComponentEditorUtils.h"
 #endif
