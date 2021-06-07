@@ -4,6 +4,7 @@
 
 #include <deque>
 #include <mutex>
+#include <thread>
 #include <stdint.h>
 
 class FSocket;
