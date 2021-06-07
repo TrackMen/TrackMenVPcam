@@ -6,21 +6,22 @@
 #include "Modules/ModuleInterface.h"
 #include "Modules/ModuleManager.h"
 
-/**
-* Defines the main plugin module.
-*/
-class ITrackMenVPCamModule : public IModuleInterface {
-public:
-	// WARNING: if you change MyModuleName here, also update it in the .cpp file.
-	//          Necessary because of Unreal macro idiosyncrasy.
-	static constexpr char* MyModuleName = "TrackMenVPCam";
+namespace TrackMen {
 
-	static inline ITrackMenVPCamModule& Get(){
-		return FModuleManager::LoadModuleChecked< ITrackMenVPCamModule >(MyModuleName);
-	}
+	static const char* ModuleName = (const char*)"TrackMenVPCam";
+	/**
+	* Defines the main plugin module.
+	*/
+	class ITrackMenVPCamModule : public IModuleInterface {
+	public:
 
-	static inline bool IsAvailable(){
-		return FModuleManager::Get().IsModuleLoaded(MyModuleName);
-	}
-};
+		static inline ITrackMenVPCamModule& Get() {
+			return FModuleManager::LoadModuleChecked< ITrackMenVPCamModule >(ModuleName);
+		}
 
+		static inline bool IsAvailable() {
+			return FModuleManager::Get().IsModuleLoaded(ModuleName);
+		}
+	};
+
+}

@@ -6,7 +6,8 @@
 #include "CoreMinimal.h"
 #include "PluginLogging.h"
 
-class FTrackMenVPCamModule : public ITrackMenVPCamModule {
+
+class FTrackMenVPCamModule : public TrackMen::ITrackMenVPCamModule {
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
 };
@@ -17,9 +18,6 @@ void FTrackMenVPCamModule::StartupModule() {
 	UE_LOG(LogTrackMenPlugin, Display, TEXT("TrackMen: StartupModule"));
 }
 
-void FTrackMenVPCamModule::ShutdownModule(){
+void FTrackMenVPCamModule::ShutdownModule() {
 	UE_LOG(LogTrackMenPlugin, Display, TEXT("TrackMen: ShutdownModule"));
 }
-
-
-

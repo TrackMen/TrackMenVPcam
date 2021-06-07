@@ -8,21 +8,19 @@
 
 namespace TrackMen {
 
+	static const char* EditorModuleName = (const char*)"TrackMenVPCamEditor";
 	/**
 	* Defines the Editor module.
 	*/
 	class EditorModule : public IModuleInterface {
 	public:
-		// WARNING: if you change MyModuleName here, also update it in the .cpp file.
-        //          Necessary because of Unreal macro idiosyncrasy.
-		static constexpr char* MyModuleName = "TrackMenVPCamEditor";
 
 		static inline EditorModule& Get() {
-			return FModuleManager::LoadModuleChecked< EditorModule >(MyModuleName);
+			return FModuleManager::LoadModuleChecked< EditorModule >(EditorModuleName);
 		}
 
 		static inline bool IsAvailable() {
-			return FModuleManager::Get().IsModuleLoaded(MyModuleName);
+			return FModuleManager::Get().IsModuleLoaded(EditorModuleName);
 		}
 	};
 
