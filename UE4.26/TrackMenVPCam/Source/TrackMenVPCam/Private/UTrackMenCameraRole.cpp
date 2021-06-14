@@ -1,7 +1,5 @@
 /* Copyright 2021 TrackMen GmbH <mail@trackmen.de> */
 
-#pragma once
-
 #include "UTrackMenCameraRole.h"
 
 #define LOCTEXT_NAMESPACE "TrackMenCameraRole"

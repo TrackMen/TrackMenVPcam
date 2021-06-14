@@ -1,7 +1,5 @@
 /* Copyright 2021 TrackMen GmbH <mail@trackmen.de> */
 
-#pragma once
-
 #include "UTrackMenCameraController.h"
 #include "UTrackMenCameraRole.h"
 #include "UTrackMenLiveLinkCameraControllerComponent.h"

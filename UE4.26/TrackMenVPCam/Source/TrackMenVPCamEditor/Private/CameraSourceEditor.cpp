@@ -1,7 +1,5 @@
 /* Copyright 2021 TrackMen GmbH <mail@trackmen.de> */
 
-#pragma once
-
 #include "CameraSourceEditor.h"
 #include "CoreMinimal.h"
 #include "EditorLogging.h"

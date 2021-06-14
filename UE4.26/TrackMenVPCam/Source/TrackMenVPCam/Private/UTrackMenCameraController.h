@@ -1,5 +1,7 @@
 /* Copyright 2021 TrackMen GmbH <mail@trackmen.de> */
 
+#pragma once
+
 #include "TrackMenCameraTrackingData.h"
 #include "Controllers/LiveLinkTransformController.h"
 #include "UTrackMenCameraController.generated.h"

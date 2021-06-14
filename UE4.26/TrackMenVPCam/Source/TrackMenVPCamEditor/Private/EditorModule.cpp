@@ -1,7 +1,5 @@
 /* Copyright 2021 TrackMen GmbH <mail@trackmen.de> */
 
-#pragma once
-
 #include "EditorModule.h"
 #include "CoreMinimal.h"
 
