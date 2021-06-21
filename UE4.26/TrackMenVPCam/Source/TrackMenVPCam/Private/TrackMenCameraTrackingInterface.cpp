@@ -18,10 +18,6 @@ namespace TrackMen {
 
 	}
 
-	CameraTrackingInterface::~CameraTrackingInterface() {
-		stop_camera_tracking();
-	}
-
 	TrkErrorType_t CameraTrackingInterface::check_error() {
 		return m_last_error;
 	}

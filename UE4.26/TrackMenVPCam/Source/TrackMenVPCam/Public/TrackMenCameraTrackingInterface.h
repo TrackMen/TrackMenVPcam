@@ -79,7 +79,7 @@ namespace TrackMen {
 	class CameraTrackingInterface {
 	public:
 		CameraTrackingInterface();
-		virtual ~CameraTrackingInterface();
+		virtual ~CameraTrackingInterface() { stop_camera_tracking(); }
 
 		TrkErrorType_t check_error();
 		bool got_parameters();
