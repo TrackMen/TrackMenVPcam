@@ -1,0 +1,38 @@
+{
+	"FileVersion" : 3,
+	"Version" : 20211004,
+	"VersionName" : "20211004",
+	"EngineName" : "4.26.0",
+	"FriendlyName" : "TrackMen VP cam",
+	"Description" : "Use TrackMen camera tracking systems in UnrealEngine.",
+	"Category" : "TrackMen",
+	"CreatedBy" : "TrackMen Ltd.",
+	"CreatedByURL" : "www.trackmen.de",
+	"DocsURL" : "",
+	"MarketplaceURL" : "com.epicgames.launcher://ue/marketplace/product/3cf9e39fbdcb474fbbdfd631e19c06c8",
+	"SupportURL" : "",
+	"EnabledByDefault" : true,
+	"CanContainContent" : true,
+	"IsBetaVersion" : false,
+	"Installed" : true,
+  "Modules": [
+    {
+      "Name": "TrackMenVPCam",
+      "Type": "Runtime",
+      "LoadingPhase": "Default",
+	  "BlacklistPlatforms": []
+    },
+    {
+      "Name": "TrackMenVPCamEditor",
+      "Type": "Runtime",
+      "LoadingPhase": "Default",
+	  "BlacklistPlatforms": []
+    }
+  ],
+  "Plugins": [
+    {
+      "Name": "LiveLink",
+      "Enabled":  true
+    }
+  ]
+}
